@@ -1,5 +1,9 @@
 #!/usr/bin/python
 # load MNIST data
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import tensorflow as tf 
 from tensorflow.examples.tutorials.mnist import input_data 
 mnist = input_data.read_data_sets("Mnist_data/", one_hot=True)
@@ -32,7 +36,7 @@ def max_pool_2x2(x):
 # Create the model
 # placeholder
 x = tf.placeholder(tf.float32, [None, 784])
-y_ = tf.placeholder(tf.float32, [None, 10])
+y = tf.placeholder(tf.float32, [None, 10])
 # variables
 
 # first convolutinal layer
@@ -69,20 +73,20 @@ b_fc2 = bias_variable([10])
 y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, w_fc2) + b_fc2)
 
 # train and evaluate the model
-cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y_conv))
+cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=y_conv))
 #train_step = tf.train.GradientDescentOptimizer(1e-3).minimize(cross_entropy)
 train_step = tf.train.AdagradOptimizer(1e-4).minimize(cross_entropy)
-correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
+correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 #save model
 saver=tf.train.Saver()
 #train
 sess.run(tf.global_variables_initializer())
-for i in range(21):
+for i in range(11):
     for batch in range(n_batch):
         batch_xs,batch_ys=mnist.train.next_batch(batch_size)
-        sess.run(train_step,feed_dict={x:batch_xs, y_:batch_ys, keep_prob:0.7})
-    acc=sess.run(accuracy,feed_dict={x:mnist.test.images, y_:mnist.test.labels, keep_prob:1.0})  
+        sess.run(train_step,feed_dict={x:batch_xs, y:batch_ys, keep_prob:0.7})
+    acc=sess.run(accuracy,feed_dict={x:mnist.test.images, y:mnist.test.labels, keep_prob:1.0})  
     print('Iter'+ str(i)+", test accuracy : "+ str(acc))
 
 saver.save(sess,'/root/tensorflow/train/model.ckpt')
