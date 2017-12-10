@@ -75,17 +75,17 @@ y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, w_fc2) + b_fc2)
 # train and evaluate the model
 cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=y_conv))
 #train_step = tf.train.GradientDescentOptimizer(1e-3).minimize(cross_entropy)
-train_step = tf.train.AdagradOptimizer(1e-4).minimize(cross_entropy)
+train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 #save model
 saver=tf.train.Saver()
 #train
 sess.run(tf.global_variables_initializer())
-for i in range(11):
+for i in range(2):
     for batch in range(n_batch):
         batch_xs,batch_ys=mnist.train.next_batch(batch_size)
-        sess.run(train_step,feed_dict={x:batch_xs, y:batch_ys, keep_prob:0.7})
+        sess.run(train_step,feed_dict={x:batch_xs, y:batch_ys, keep_prob:0.8})
     acc=sess.run(accuracy,feed_dict={x:mnist.test.images, y:mnist.test.labels, keep_prob:1.0})  
     print('Iter'+ str(i)+", test accuracy : "+ str(acc))
 
