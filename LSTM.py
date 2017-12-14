@@ -44,6 +44,7 @@ train_step=tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 correct_prediction=tf.equal(tf.argmax(prediction,1),tf.argmax(y,1))
 accuracy=tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
 init=tf.global_variables_initializer()
+saver=tf.train.Saver()
 with tf.Session() as sess:
     sess.run(init)
     for epoch in range(3):
@@ -52,7 +53,7 @@ with tf.Session() as sess:
             sess.run(train_step,feed_dict={x:batch_xs,y:batch_ys})
         acc=sess.run(accuracy,feed_dict={x:mnist.test.images,y:mnist.test.labels})
         print ("Iter" + str(epoch) + "Test accuracy : " + str(acc))
-
+    saver.save(sess,'/root/tensorflow/mycode/lstm_logs/lstm.ckpt')
 
 
 
