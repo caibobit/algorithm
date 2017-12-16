@@ -9,13 +9,13 @@ import tensorflow as tf
 import os
 import numpy as np
 import re
-from PIL import Image
+import Image
 import matplotlib.pyplot as plt
 
 class NodeLookup(object):
     def __init__(self):
         label_lookup_path ='inception_model/imagenet_2012_challenge_label_map_proto.pbtxt'
-        uid_lookup_path='inception_model/imagenet_synset_to_human_label_map'
+        uid_lookup_path='inception_model/imagenet_synset_to_human_label_map.txt'
         self.node_lookup=self.load(label_lookup_path,uid_lookup_path)
     
     def load(self,label_lookup_path,uid_lookup_path):
@@ -41,7 +41,7 @@ class NodeLookup(object):
                 target_class = int(line.split(':')[1])
             if line.startswith('  target_class_string:'):
                 #获取字符串
-                target_class_string = line.split(':')[1]
+                target_class_string = line.split(': ')[1]
                 #建立映射
                 node_id_to_uid[target_class]=target_class_string[1:-2]
         #将两个文件建立联系
@@ -84,7 +84,7 @@ with tf.Session() as sess:
             top_k = predictions.argsort()[-5:][::-1]
             node_lookup = NodeLookup()
             for node_id in top_k:
-                human_string =node_lookup[node_id]
+                human_string =node_lookup.id_to_string(node_id)
                 #置信度
                 score = predictions[node_id]
                 print ('%s (score = %.5f)' % (human_string, score))
