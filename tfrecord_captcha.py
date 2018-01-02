@@ -67,7 +67,7 @@ def _convert_dataset(split_name,filenames,dataset_dir):
         #定义tfrecord的路径名字
         output_filename = os.path.join(TFRECORD_DIR,split_name+'.tfrecords')
         with tf.python_io.TFRecordWriter(output_filename) as tfrecord_writer:
-            for i ,filename in enumerate(filenames)
+            for i ,filename in enumerate(filenames):
                 try:
                     sys.stdout.write('\r>> Converting image %d/%d'% (i+1,len(filenames)))
                     sys.stdout.flush()
