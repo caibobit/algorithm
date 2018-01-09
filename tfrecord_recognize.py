@@ -107,7 +107,7 @@ with tf.Session() as sess:
     #保存模型
     saver = tf.train.Saver()
     #初始化参数
-    sess.run(tf.global_variables_initializer)
+    sess.run(tf.global_variables_initializer())
     #创建一个协调器，管理线程
     coord = tf.train.Coordinator()
     #启动队列
