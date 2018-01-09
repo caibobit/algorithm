@@ -122,7 +122,7 @@ with tf.Session() as sess:
             #每2000次降低一次学习率
             if i % 2000 == 0:
                 sess.run(tf.assign(lr,lr/3))
-            acc0,acc1,acc2,acc3,loss_ = sess.run(accuracy0,accuracy1,accuracy2,accuracy3,total_loss,feed_dict={x:b_image,
+            acc0,acc1,acc2,acc3,loss_ = sess.run([accuracy0,accuracy1,accuracy2,accuracy3,total_loss],feed_dict={x:b_image,
                                                                                                                y0:b_label0,
                                                                                                                y1:b_label1,
                                                                                                                y2:b_label2,
